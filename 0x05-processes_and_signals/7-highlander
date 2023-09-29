@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+#script should display "To infinity and beyond" with a 2-second sleep between each iteration and handle the SIGTERM signal by echoing "I am invincible!!!" 
+trap 'echo "I am invincible!!!"' SIGTERM
+
+while true
+do
+    echo "To infinity and beyond"
+    sleep 2
+done
