@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 # This script displays lines containing the word "bash" and extracts the PID of your Bash process.
-
 # Disable shellcheck warning SC2009 for using 'ps' with 'grep'
-# shellcheck disable=SC2009
 
-# Use 'ps' to list all processes and filter lines containing "bash"
-# Use 'grep' to filter lines and exclude the 'grep' process itself
-# Use 'awk' to extract the PID (second column)
-ps aux | grep "bash" | grep -v "grep" | awk '{print $2}'
+ps auxf | grep bash
