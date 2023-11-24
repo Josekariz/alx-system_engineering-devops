@@ -1,4 +1,5 @@
 #!/bin/bash
-while [[ true ]]; do
+while [[ true ]]
+do
     sleep 2
 done
