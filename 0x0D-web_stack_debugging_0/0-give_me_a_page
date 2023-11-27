@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# This script fixes the Docker container to return a page containing "Hello Holberton"
+
+# Start Apache
+service apache2 start
+
+# Set ServerName in Apache configuration
+echo "ServerName localhost" >> /etc/apache2/apache2.conf
+
+# Restart Apache
+service apache2 restart
+
+# Test the fixed container
+curl localhost:8080
