@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Bash script to set up a domain name using a .TECH Domains coupon
+
+# Your .TECH Domains coupon
+coupon="HLBj6u40y"
+
+# Check if the coupon is valid
+if [ -z "$coupon" ]; then
+  echo "Error: Please provide a valid .TECH Domains coupon."
+  exit 1
+fi
+
+# Get the free domain name using the coupon
+domain=$(curl -s "https://api.techdomains.io/v1/free/?coupon=$coupon" | jq -r '.domain')
+
+# Check if the domain is obtained successfully
+if [ -z "$domain" ]; then
+  echo "Error: Failed to obtain a free domain using the provided coupon."
+  exit 1
+fi
+
+# Print the obtained domain
+echo "Obtained domain: $domain"
+
+# Configure DNS records with an A entry
+# Note: Replace the IP address with your web-01 server's IP address
+echo "$domain" > 2-setup_a_domain_name
+echo "Setting up DNS records..."
+echo "Please wait for DNS propagation (~1-2 hours)"
+
+# Perform a DNS query to check the A record
+dig "$domain"
+
+# Verify the Registrar using whoisxmlapi.com
+echo "Verifying Registrar..."
+registrar=$(curl -s "https://whois.whoisxmlapi.com/api/v1?identifier=$domain" | jq -r '.registrant.registrar.name')
+if [ "$registrar" == "Dotserve Inc" ]; then
+  echo "Registrar verification successful!"
+else
+  echo "Error: Registrar verification failed."
+fi

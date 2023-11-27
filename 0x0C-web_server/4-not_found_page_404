@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Bash script to configure Nginx custom 404 page
+
+# Define the Nginx configuration file
+nginx_conf="/etc/nginx/sites-available/default"
+
+# Check if the Nginx configuration file exists
+if [ ! -f "$nginx_conf" ]; then
+  echo "Error: Nginx configuration file not found."
+  exit 1
+fi
+
+# Backup the original Nginx configuration file
+cp "$nginx_conf" "$nginx_conf.bak"
+
+# Configure the custom 404 page in the Nginx configuration file
+sed -i '/server {/a \ \ \ \ error_page 404 /404.html;' "$nginx_conf"
+sed -i '/location = \/404.html {/a \ \ \ \ \ \ \ \ root /usr/share/nginx/html;' "$nginx_conf"
+echo 'Ceci n'"'"'est pas une page' | sudo tee /usr/share/nginx/html/404.html > /dev/null
+
+# Restart Nginx to apply the changes
+service nginx restart
+
+# Print a message indicating successful configuration
+echo "Nginx custom 404 page configured successfully!"

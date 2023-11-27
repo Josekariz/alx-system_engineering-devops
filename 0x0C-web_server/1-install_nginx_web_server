@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Bash script to install and configure Nginx on a new Ubuntu machine
+
+# Install Nginx
+apt-get update
+apt-get install -y nginx
+
+# Make sure Nginx is running
+service nginx start
+
+# Configure Nginx to listen on port 80
+sed -i 's/listen 80 default_server;/listen 80;/g' /etc/nginx/sites-available/default
+
+# Restart Nginx without using systemctl
+service nginx restart
+
+# Create a sample HTML file with "Hello World!"
+echo "<html><body>Hello World!</body></html>" > /var/www/html/index.html
+
+# Check Nginx by querying its root with a GET request using curl
+if [ "$(curl -s http://localhost)" == "<html><body>Hello World!</body></html>" ]; then
+  echo "Nginx installation and configuration successful!"
+else
+  echo "Error: Nginx installation or configuration failed."
+fi
